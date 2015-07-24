@@ -214,6 +214,11 @@ public class MainActivity extends ActionBarActivity {
         Bitmap bitmap = rev.getFrameAtTime(mVideoView.getCurrentPosition() * 1000, MediaMetadataRetriever.OPTION_CLOSEST_SYNC);
         mImg.setImageBitmap(bitmap);
         return bitmap;
+
+//        mVideoView.setDrawingCacheEnabled(true);
+//        Bitmap bitmap = mVideoView.getDrawingCache();
+//        mImg.setImageBitmap(bitmap);
+//        return bitmap;
     }
 
 }
