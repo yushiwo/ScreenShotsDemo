@@ -44,11 +44,29 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="截取某个view" />
+
+    <Button
+        android:id="@+id/btn_play_video_local"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="播放本地视频" />
+    <Button
+        android:id="@+id/btn_play_video_remote"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="播放网络视频" />
+    <Button
+        android:id="@+id/btn_shot_video_remote"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="网络播放视频截图"
+        android:visibility="gone"/>
     <Button
         android:id="@+id/btn_shot_video_local"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="本地播放视频截图" />
+        android:text="本地播放视频截图"
+        android:visibility="gone"/>
 
 </LinearLayout>
 </ScrollView>

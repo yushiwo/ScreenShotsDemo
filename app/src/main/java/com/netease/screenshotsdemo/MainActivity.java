@@ -26,7 +26,22 @@ public class MainActivity extends ActionBarActivity {
      * 某个view的截图
      */
     private Button mViewShotBtn;
+    /**
+     * 本地播放视频截图
+     */
     private Button mLocalVideoShotBtn;
+    /**
+     * 远程（网络）播放视频截图
+     */
+    private Button mRemoteVideoShotBtn;
+    /**
+     * 播放本地视频
+     */
+    private Button mLocalPlayBtn;
+    /**
+     * 播放远程视频
+     */
+    private Button mRemotePlayBtn;
 
     private ImageView mImg;
     private VideoView mVideoView;
@@ -41,8 +56,6 @@ public class MainActivity extends ActionBarActivity {
         initView();
         initData();
         setListeners();
-
-        playLocalVideo();
     }
 
     /**
@@ -52,10 +65,18 @@ public class MainActivity extends ActionBarActivity {
         mBtn = (Button)findViewById(R.id.btn);
         mViewShotBtn = (Button)findViewById(R.id.btn_shot_view);
         mLocalVideoShotBtn = (Button)findViewById(R.id.btn_shot_video_local);
+        mRemoteVideoShotBtn = (Button)findViewById(R.id.btn_shot_video_remote);
+
+        mLocalPlayBtn = (Button)findViewById(R.id.btn_play_video_local);
+        mRemotePlayBtn = (Button)findViewById(R.id.btn_play_video_remote);
+
         mImg = (ImageView)findViewById(R.id.img);
         mVideoView = (VideoView)findViewById(R.id.videoview);
     }
 
+    /**
+     * 数据初始化
+     */
     private void initData(){
         mVideoUri = Uri.parse("http://v.cctv.com/flash/mp4video28/TMS/2013/05/06/265114d5f2e641278098503f1676d017_h264418000nero_aac32-1.mp4");
         mVideoPath = "/sdcard/test.mp4";
@@ -65,6 +86,7 @@ public class MainActivity extends ActionBarActivity {
      * 设置监听
      */
     private void setListeners(){
+        //全屏截屏
         mBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -72,6 +94,7 @@ public class MainActivity extends ActionBarActivity {
             }
         });
 
+        //某个view截取
         mViewShotBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -79,10 +102,42 @@ public class MainActivity extends ActionBarActivity {
             }
         });
 
+        //本地播放视频截屏
         mLocalVideoShotBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 shotLocalVideo();
+            }
+        });
+
+        //远程播放视频截屏
+        mRemoteVideoShotBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //网络播放视频截图
+                shotRemoteVideo();
+            }
+        });
+
+        //开始播放本地视频
+        mLocalPlayBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                playLocalVideo();
+                mRemotePlayBtn.setVisibility(View.GONE);
+                mRemoteVideoShotBtn.setVisibility(View.GONE);
+                mLocalVideoShotBtn.setVisibility(View.VISIBLE);
+            }
+        });
+
+        //开始播放远程视频
+        mRemotePlayBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                playRemoteVideo();
+                mLocalPlayBtn.setVisibility(View.GONE);
+                mLocalVideoShotBtn.setVisibility(View.GONE);
+                mRemoteVideoShotBtn.setVisibility(View.VISIBLE);
             }
         });
     }
@@ -144,6 +199,18 @@ public class MainActivity extends ActionBarActivity {
     private Bitmap shotLocalVideo(){
         MediaMetadataRetriever rev = new MediaMetadataRetriever();
         rev.setDataSource(mVideoPath);
+        Bitmap bitmap = rev.getFrameAtTime(mVideoView.getCurrentPosition() * 1000, MediaMetadataRetriever.OPTION_CLOSEST_SYNC);
+        mImg.setImageBitmap(bitmap);
+        return bitmap;
+    }
+
+    /**
+     * 远程（网络）视频播放截屏
+     * @return
+     */
+    private Bitmap shotRemoteVideo(){
+        MediaMetadataRetriever rev = new MediaMetadataRetriever();
+        rev.setDataSource(this, mVideoUri);
         Bitmap bitmap = rev.getFrameAtTime(mVideoView.getCurrentPosition() * 1000, MediaMetadataRetriever.OPTION_CLOSEST_SYNC);
         mImg.setImageBitmap(bitmap);
         return bitmap;
